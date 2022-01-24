@@ -15,9 +15,6 @@ jobs:
         cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
-        with:
-          repository: xmake-io/xmake
-          submodules: true
 
       - name: Set up multiarch/qemu-user-static
         run: |
@@ -28,11 +25,11 @@ jobs:
           args: >
             bash -c
             "apt update &&
-            apt install make gcc ruby -y &&
+            apt install make gcc git ruby -y &&
             gem install fpm &&
-            cd /github/workspace/xmake &&
-            ls -ls &&
-            pwd &&
+            cd /github/workspace &&
+            git clone --recursive https://github.com/xmake-io/xmake.git &&
+            cd ./xmake
             ./scripts/makepkg deb || true"
             
       - name: Upload
