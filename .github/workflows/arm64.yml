@@ -31,6 +31,8 @@ jobs:
             apt install make gcc ruby -y &&
             gem install fpm &&
             cd /github/workspace/xmake &&
+            ls -ls
+            pwd
             ./scripts/makepkg deb || true"
             
       - name: Upload
