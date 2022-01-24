@@ -19,7 +19,7 @@ jobs:
           repository: xmake-io/xmake
           submodules: true
 
-      - name: Build and package
+      - name: Set up multiarch/qemu-user-static
         run: |
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
@@ -31,8 +31,8 @@ jobs:
             apt install make gcc ruby -y &&
             gem install fpm &&
             cd /github/workspace/xmake &&
-            ls -ls
-            pwd
+            ls -ls &&
+            pwd &&
             ./scripts/makepkg deb || true"
             
       - name: Upload
