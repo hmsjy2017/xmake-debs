@@ -1,4 +1,4 @@
-name: Build arm64
+name: Build
 
 on:
   push:
@@ -10,9 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    concurrency:
-        group: ${{ github.head_ref }}-arm64
-        cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
 
@@ -30,15 +27,28 @@ jobs:
             cd /github/workspace &&
             git clone --recursive https://github.com/xmake-io/xmake.git &&
             cd ./xmake &&
-            ./scripts/makepkg deb || true"
+            ./scripts/makepkg deb || true &&
+            mv ./*.deb ../ &&
+            rm -rf xmake"
+
+      - uses: docker://multiarch/ubuntu-core:armhf-bionic
+        with:
+          args: >
+            bash -c
+            "apt update &&
+            apt install make gcc git ruby -y &&
+            gem install fpm &&
+            cd /github/workspace &&
+            git clone --recursive https://github.com/xmake-io/xmake.git &&
+            cd ./xmake &&
+            ./scripts/makepkg deb || true &&
+            mv ./*.deb ../ &&
+            rm -rf xmake"
             
       - name: Upload
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          sudo mv xmake/*.deb .
-          sudo rm -rf xmake 
-          git fetch
           git add .
-          git commit -m "Upload xmake v$(curl -s https://api.github.com/repos/xmake-io/xmake/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")' | tr -d 'v') arm64" 
+          git commit -m "Upload xmake v$(curl -s https://api.github.com/repos/xmake-io/xmake/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")' | tr -d 'v')" 
           git push
