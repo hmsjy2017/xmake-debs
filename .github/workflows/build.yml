@@ -29,6 +29,7 @@ jobs:
             cd ./xmake &&
             ./scripts/makepkg deb || true &&
             mv ./*.deb ../ &&
+            cd .. &&
             rm -rf xmake"
 
       - uses: docker://multiarch/ubuntu-core:armhf-bionic
@@ -43,6 +44,7 @@ jobs:
             cd ./xmake &&
             ./scripts/makepkg deb || true &&
             mv ./*.deb ../ &&
+            cd .. &&
             rm -rf xmake"
             
       - name: Upload
