@@ -17,7 +17,7 @@ jobs:
         run: |
           docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-      - uses: docker://multiarch/ubuntu-core:arm64-bionic
+      - uses: docker://multiarch/ubuntu-core:arm64-focal
         with:
           args: >
             bash -c
@@ -32,7 +32,7 @@ jobs:
             cd .. &&
             rm -rf xmake"
 
-      - uses: docker://multiarch/ubuntu-core:armhf-bionic
+      - uses: docker://multiarch/ubuntu-core:armhf-focal
         with:
           args: >
             bash -c
